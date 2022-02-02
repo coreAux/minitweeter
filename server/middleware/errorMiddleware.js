@@ -1,4 +1,5 @@
 const errorHandler = (error, req, res, next) => {
+  /* eslint-disable-next-line */
   console.error(error.message, error.name, error.extra)
 
   if (error.name === 'ApplicationError') {

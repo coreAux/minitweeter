@@ -1,0 +1,68 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize]
+
+jobs:
+  simple_deployment_pipeline:
+    runs-on: ubuntu-18.04
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+
+      - name: npm install
+        run: npm install
+
+      # - name: lint
+      #   run: npm run eslint
+
+      - name: build
+        run: npm run build
+
+      # - name: test
+      #   run: npm run test
+
+      # - name: e2e tests
+      #   uses: cypress-io/github-action@v2
+      #   with:
+      #     command: npm run test:e2e
+      #     start: npm run start-prod
+      #     wait-on: http://localhost:5000
+
+      - name: deploy to heroku
+        if: contains(toJson(github.event.commits.*.message), '#skip') == false
+        uses: AkhileshNS/heroku-deploy@v3.6.8
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          procfile: 'web: npm run start-prod'
+          healthcheck: 'https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com/api/health'
+          checkstring: 'ok'
+          rollbackonhealthcheckfailed: true
+
+      # - uses: actions/checkout@v2
+
+      # - name: Bump version and push tag
+      #   if: contains(toJson(github.event.commits.*.message), '#skip') == false
+      #   uses: anothrNick/github-tag-action@eca2b69f9e2c24be7decccd0f15fdb1ea5906598
+      #   env:
+      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      #     DEFAULT_BUMP: 'patch'
+
+      # - uses: 8398a7/action-slack@v3
+      #   with:
+      #     status: ${{ job.status }}
+      #     fields: repo, message, commit, author, took
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #   if: contains(toJson(github.event.commits.*.message), '#skip') == false && success() || failure()

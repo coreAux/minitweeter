@@ -1,0 +1,14 @@
+name: Health Check <3
+
+on:
+  schedule:
+    - cron:  '30 12 * * *'
+
+jobs:
+  health_check_job:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Check the deployed service url
+        uses: jtalk/url-health-check-action@eb8f4f41fd14e4ecde68b32407b17acd59e6135c
+        with:
+          url: https://minitweeter-fso21.herokuapp.com/
