@@ -1,3 +1,4 @@
+#Test
 # create-app
 Simple boilerplate
 
@@ -95,7 +96,7 @@ For backend see package.json and, for example, server/index.js for examples with
 
 #### webpack.config.js ####
 
-Webpack stuff. 
+Webpack stuff.
 From top to bottom:
   - Uses hot loading when in development mode
   - Has the aliases for frontend
