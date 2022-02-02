@@ -1,4 +1,3 @@
-#Test
 # create-app
 Simple boilerplate
 

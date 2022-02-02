@@ -1,15 +1,130 @@
-$mainColor: whitesmoke;
+@import url('https://fonts.googleapis.com/css2?family=Yellowtail&display=swap');
 
-body {
-  font-family: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300&display=swap');
+
+
+$mainColor: whitesmoke;
+$linkColor: sienna;
+$gradient: linear-gradient(0deg, $mainColor, $linkColor);
+
+$primaryGreenHsl: 149deg 66% 15%;
+$primaryGreen: hsl(149deg 66% 15%);
+$secondaryGreenHsl: 97deg 100% 21%;
+$secondaryGreen: hsl($secondaryGreenHsl);
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
   margin: 0;
 }
 
-.navbar {
-  height: 5em;
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: Prompt, Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+  margin: 0;
+  font-size: 16px;
   background-color: $mainColor;
+  background: radial-gradient(circle 40px at 90% 10%, yellow 98%, transparent 98%) fixed no-repeat, linear-gradient(185deg, aliceblue 10%, skyblue, deepskyblue 100%) fixed no-repeat;
+  position: relative;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+
+  @media (max-width: 700px) {
+    font-size: 12px;
+  }
+
+  &::after {
+    content: "";
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background: conic-gradient(from -45deg at bottom, $secondaryGreen, transparent 1deg 89deg, $secondaryGreen 90deg) 15px bottom / 30px 30px repeat-x, conic-gradient(from -45deg at bottom, hsl($primaryGreenHsl), transparent 1deg 89deg, hsl($primaryGreenHsl) 90deg) 0px bottom / 30px 30px repeat-x;
+  }
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+h1 {
+  font-family: Yellowtail, sans-serif;
+}
+
+a,
+a:link,
+a:visited,
+a:active, {
+  color: mediumblue;
+}
+
+a:hover {
+  color: blue;
+  text-decoration: none;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+input {
+  border: none;
+  border-radius: 9999px;
+  background: $primaryGreen;
+  padding: 10px 20px;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px $secondaryGreen;
+  }
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  border-radius: 9999px;
+  background: mediumblue;
+  color: white;
+  padding: 4px 20px;
+
+  &:hover {
+    background: blue;
+  }
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  height: 5em;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: radial-gradient(circle 4.75em at 50% 50%, white 40%, transparent 50%) 50px 0px / 50px 5em repeat-x;
+
   img {
-    height: 100%
+    height: 50px;
+    width: 50px;
+  }
+
+  div {
+    display: flex;
+    place-items: center;
+  }
+
+  p + a {
+    margin-left: 20px;
   }
 }
 
@@ -17,14 +132,62 @@ body {
   padding: 10px;
   min-height: calc(100vh - 10em);
   display: flex;
+  align-items: center;
+  justify-content: space-evenly;
   flex-direction: column;
+
+  & > .timeline > p {
+    margin-top: 20px;
+  }
+
+  & > .timeline > p + p {
+    margin-top: 20px;
+  }
 }
 
 .footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   height: 5em;
-  background-color: $mainColor;
+  padding: 10px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: end;
+
   img {
-    height: 100%;
-    float: right
+    height: 20px;
+    width: 20px;
+    float: right;
   }
+}
+
+.timeline {
+  max-width: 640px;
+  padding: 0 32px;
+  margin: 0 auto;
+}
+
+div.tweet {
+  margin: 40px 0 40px 0;
+}
+
+div.tweet img {
+  width: 2em;
+  height: 2em;
+  border-radius: 50px;
+  margin-right: 1em;
+}
+
+div.tweet div.info {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+div.tweet p {
+  display: flex;
+  align-items: center;
+  margin-right: 2em;
 }
