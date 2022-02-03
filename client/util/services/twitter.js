@@ -11,3 +11,8 @@ export const getUser = async () => {
   const response = await axios.get(`${basePath}/user`)
   return response.data
 }
+
+export const getMoreTimeline = async (maxId) => {
+  const response = await axios.post(`${basePath}/moreTimeline`, { maxId })
+  return response.data
+}

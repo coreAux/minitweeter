@@ -29,7 +29,7 @@ body {
   margin: 0;
   font-size: 16px;
   background-color: $mainColor;
-  background: radial-gradient(circle 40px at 90% 10%, yellow 98%, transparent 98%) fixed no-repeat, linear-gradient(185deg, aliceblue 10%, skyblue, deepskyblue 100%) fixed no-repeat;
+  background: radial-gradient(circle 40px at 90% 10%, yellow 98%, transparent 98%) fixed no-repeat, radial-gradient(circle at 90% 10%, aliceblue 10%, skyblue, deepskyblue 100%) fixed no-repeat;
   position: relative;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -160,9 +160,7 @@ button {
 .footer {
   position: fixed;
   bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 5em;
+  right: 0;
   padding: 10px;
   display: flex;
   align-items: flex-end;
@@ -179,6 +177,15 @@ button {
   max-width: 640px;
   padding: 0 32px;
   margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+
+  button {
+    margin: 40px 0;
+  }
 }
 
 div.tweet {
@@ -202,4 +209,30 @@ div.tweet p {
   display: flex;
   align-items: center;
   margin-right: 2em;
+}
+
+
+.error {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  border-radius: 10px;
+  color: white;
+  background: slategray;
+  max-width: 640px;
+  padding: 16px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: -2px 2px 0 4px darkslategray;
+}
+
+button.errorButton {
+  background-color: darkred;
+
+  &:hover {
+    background-color: red;
+  }
 }

@@ -2,11 +2,13 @@ const { ApplicationError } = require('@util/customErrors')
 const oauth = require('oauth')
 const Twitter = require('twitter')
 
+const callbackURI = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/twitter/callback' : 'https://minitweeter-fso21.herokuapp.com/api/twitter/callback'
+
 const oauthConsumer = new oauth.OAuth(
   'https://twitter.com/oauth/request_token', 'https://twitter.com/oauth/access_token',
   process.env.TWITTER_API_KEY,
   process.env.TWITTER_API_KEY_SECRET,
-  '1.0A', 'http://127.0.0.1:8000/api/twitter/callback', 'HMAC-SHA1',
+  '1.0A', callbackURI, 'HMAC-SHA1',
 )
 
 const getOAuthRequestToken = () => new Promise((resolve, reject) => {
@@ -38,16 +40,13 @@ const callback = async (req, res) => {
 
   const { oauthAccessToken, oauthAccessTokenSecret, results } = await getOAuthAccessTokenWith({ oauthRequestToken, oauthRequestTokenSecret, oauthVerifier })
   req.session.oauthAccessToken = oauthAccessToken
+  req.session.oauthAccessTokenSecret = oauthAccessTokenSecret
 
   const { screen_name: screenName } = results
 
   req.session.twitter_screen_name = screenName
-  req.session.oauth_access_token = oauthAccessToken
-  req.session.oauth_acces_token_secret = oauthAccessTokenSecret
 
   res.cookie('twitter_screen_name', screenName, { maxAge: 900000, httpOnly: true })
-  // res.cookie('oauth_access_token', oauthAccessToken, { maxAge: 900000, httpOnly: true })
-  // res.cookie('oauth_access_token_secret', oauthAccessTokenSecret, { maxAge: 900000, httpOnly: true })
 
   req.session.save(() => res.redirect('/'))
 }
@@ -56,19 +55,53 @@ const timeline = (req, res) => {
   const client = new Twitter({
     consumer_key: process.env.TWITTER_API_KEY,
     consumer_secret: process.env.TWITTER_API_KEY_SECRET,
-    access_token_key: req.session.oauth_access_token,
-    access_token_secret: req.session.oauth_acces_token_secret,
+    access_token_key: req.session.oauthAccessToken,
+    access_token_secret: req.session.oauthAccessTokenSecret,
   })
 
-  const params = { screen_name: req.session.twitter_screen_name, include_entities: false, count: 5 }
+  const params = { screen_name: req.session.twitter_screen_name, include_entities: false, count: 20 }
 
-  client.get('statuses/home_timeline', params, (error, tweets) => (error ? new ApplicationError('Something went wrong...') : res.send(tweets)))
+  client.get('statuses/home_timeline', params, (error, tweets) => {
+    if (error && error[0].code === 88) {
+      res.status(429).send()
+    } else if (error) {
+      res.status(500).send()
+    } else {
+      res.send(tweets)
+    }
+  })
+}
+
+const moreTimeline = (req, res) => {
+  const { maxId } = req.body
+  const client = new Twitter({
+    consumer_key: process.env.TWITTER_API_KEY,
+    consumer_secret: process.env.TWITTER_API_KEY_SECRET,
+    access_token_key: req.session.oauthAccessToken,
+    access_token_secret: req.session.oauthAccessTokenSecret,
+  })
+
+  const params = {
+    screen_name: req.session.twitter_screen_name,
+    include_entities: false,
+    count: 21,
+    max_id: maxId,
+  }
+
+  client.get('statuses/home_timeline', params, (error, tweets) => {
+    if (error && error[0].code === 88) {
+      res.status(429).send()
+    } else if (error) {
+      res.status(500).send()
+    } else {
+      tweets.splice(0, 1)
+      res.send(tweets)
+    }
+  })
 }
 
 const logout = (req, res) => {
   res.clearCookie('twitter_screen_name')
-  res.clearCookie('oauth_access_token')
-  res.clearCookie('oauth_access_token_secret')
   req.session.destroy(() => res.redirect('/'))
 }
 
@@ -78,6 +111,7 @@ const user = (req, res) => {
 
 module.exports = {
   timeline,
+  moreTimeline,
   authenticate,
   callback,
   logout,

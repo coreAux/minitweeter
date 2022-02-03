@@ -1,19 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { images } from 'Utilities/common'
-import { getUser } from 'Utilities/services/twitter'
+
+import { SessionContext } from 'Components/App'
 
 const NavBar = () => {
-  const [user, setUser] = React.useState()
-
-  const handleGetUser = async () => {
-    const newUser = await getUser()
-    setUser(newUser)
-  }
-
-  React.useEffect(() => {
-    handleGetUser()
-  }, [])
+  const session = React.useContext(SessionContext)
 
   return (
     <div className="navbar">
@@ -30,16 +22,16 @@ const NavBar = () => {
         </Link>
       </div>
       <div className="cloud">
-        {!user && (
+        {!session && (
           <a href="/api/twitter/authenticate">
             <button type="button">Log in</button>
           </a>
         )}
-        {user && (
+        {session && (
           <>
             <p>
               @
-              {user}
+              {session}
             </p>
             <a href="/api/twitter/logout">
               <button type="button">Log out</button>

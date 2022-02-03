@@ -9,7 +9,6 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 app.use(session({
-  httpOnly: false,
   secret: process.env.COOKIE_SECRET || 'secret',
 }))
 

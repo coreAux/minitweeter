@@ -1,36 +1,80 @@
 import React from 'react'
-import { getTimeline } from 'Utilities/services/twitter'
+import { getTimeline, getMoreTimeline } from 'Utilities/services/twitter'
 
+import { SessionContext } from 'Components/App'
 import TweetList from 'Components/FrontPage/TweetList'
 
-const FrontPage = () => {
+const FrontPage = ({ setError, setErrorMessage }) => {
   const [timeline, setTimeline] = React.useState([])
-
-  const handleGetTimeline = async () => {
-    const newTimeline = await getTimeline()
-    setTimeline(newTimeline)
-  }
+  const [fetchingMoreTweets, setFetchingMoreTweets] = React.useState(false)
+  const session = React.useContext(SessionContext)
 
   React.useEffect(() => {
-    handleGetTimeline()
-  }, [])
+    const handleGetTimeline = async () => {
+      try {
+        const newTimeline = await getTimeline()
+        setTimeline(newTimeline)
+      } catch (e) {
+        if (e.response.status === 429) {
+          setError(true)
+          setErrorMessage("Unfortunately Twitter doesn't allow more than 15 requests per 15 minutes per user, it seems we've managed to exceed that.")
+        } else {
+          setError(true)
+          setErrorMessage(e.message)
+        }
+      }
+    }
 
-  // React.useEffect(() => {
-  //   console.log('Timeline: ', timeline)
-  // }, [timeline])
+    if (session) {
+      handleGetTimeline()
+    }
+  }, [session])
+
+  const handleGetMoreTimeline = async () => {
+    setFetchingMoreTweets(true)
+    const lastTweetIndex = timeline.length - 1
+    const lastTweetId = timeline[lastTweetIndex].id
+
+    try {
+      const moreTimeline = await getMoreTimeline(lastTweetId)
+      setTimeline((timeline) => [...timeline, ...moreTimeline])
+      setFetchingMoreTweets(false)
+    } catch (e) {
+      if (e.response.status === 429) {
+        setError(true)
+        setErrorMessage("Unfortunately Twitter doesn't allow more than 15 requests per 15 minutes per user, it seems we've managed to exceed that.")
+      } else {
+        setError(true)
+        setErrorMessage(e.message)
+      }
+      setFetchingMoreTweets(false)
+    }
+  }
 
   if (timeline.length <= 0) {
     return (
       <div className="timeline cloud">
         <h1>Welcome to MiniTweeter</h1>
         <p>
-          This is a student project that is a node.js twist on the Minimal Twitter part of the course
+          This is a student project that is a node.js twist on the Minimal Twitter project, part of the course
           {' '}
           <a href="https://www.superhi.com/courses/ajax-and-apis" target="_blank" rel="noopener noreferrer">
             Ajax + APIs
           </a>
           {' '}
-          at SuperHi and mixes the CI/CD (part 11) of Full Stack Open 2021.
+          at SuperHi. MiniTweeter is also part of the final project for
+          {' '}
+          <a href="https://fullstackopen.com/en/part11" target="_blank" rel="noopener noreferrer">
+            part 11
+          </a>
+          {' '}
+          (CI/CD) of
+          {' '}
+          <a href="https://fullstackopen.com/en/" target="_blank" rel="noopener noreferrer">
+            Full Stack Open
+          </a>
+          {' '}
+          .
         </p>
         <p>
           MiniTweeter was forked from
@@ -45,12 +89,17 @@ const FrontPage = () => {
             svgrepo.com
           </a>
           {' '}
+          .
         </p>
-        <ul>
-          <li>https://www.npmjs.com/package/twitter</li>
-          <li>https://www.npmjs.com/package/oauth</li>
-          <li>https://www.npmjs.com/package/twitter-text</li>
-        </ul>
+        <p>
+          If you&apos;re curious about the code, please
+          {' '}
+          <a href="https://github.com/coreAux/minitweeter" target="_blank" rel="noopener noreferrer">
+            check out the repo
+          </a>
+          {' '}
+          .
+        </p>
       </div>
     )
   }
@@ -61,8 +110,10 @@ const FrontPage = () => {
         {timeline.map((tweet) => (
           <TweetList key={tweet.id} tweet={tweet} />
         ))}
+        <button disabled={fetchingMoreTweets} onClick={() => handleGetMoreTimeline()} type="button">{fetchingMoreTweets ? 'Loading more tweets...' : 'Load more tweets'}</button>
       </div>
     </>
   )
 }
+
 export default FrontPage
