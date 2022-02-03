@@ -15,6 +15,10 @@ const FrontPage = () => {
     handleGetTimeline()
   }, [])
 
+  // React.useEffect(() => {
+  //   console.log('Timeline: ', timeline)
+  // }, [timeline])
+
   if (timeline.length <= 0) {
     return (
       <div className="timeline cloud">
