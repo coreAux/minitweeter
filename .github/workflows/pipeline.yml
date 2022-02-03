@@ -22,8 +22,8 @@ jobs:
       - name: npm install
         run: npm install
 
-      # - name: lint
-      #   run: npm run eslint
+      - name: lint
+        run: npm run eslint
 
       - name: build
         run: npm run build
@@ -49,6 +49,9 @@ jobs:
           healthcheck: 'https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com/api/health'
           checkstring: 'ok'
           rollbackonhealthcheckfailed: true
+        env:
+          HD_TWITTER_API_KEY: ${{secrets.TWITTER_API_KEY}}
+          HD_TWITTER_API_KEY_SECRET: ${{secrets.TWITTER_API_KEY_SECRET}}
 
       # - uses: actions/checkout@v2
 

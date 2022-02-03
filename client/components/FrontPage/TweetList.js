@@ -3,7 +3,7 @@ import React from 'react'
 import twttrtxt from 'twitter-text'
 
 const TweetList = ({ tweet }) => (
-  <div className="tweet">
+  <div className="tweet cloud">
     <h2 dangerouslySetInnerHTML={{ __html: twttrtxt.autoLink(tweet.text) }} />
     <div className="info">
       <p>

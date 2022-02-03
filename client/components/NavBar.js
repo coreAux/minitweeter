@@ -17,13 +17,19 @@ const NavBar = () => {
 
   return (
     <div className="navbar">
-      <Link to="/">
-        <img src={images.miniTweeterLogo} alt="MiniTweeter" />
-      </Link>
-      <h1>
-        MiniTweeter
-      </h1>
-      <div>
+      <div className="cloud">
+        <Link to="/">
+          <img src={images.miniTweeterLogo} alt="MiniTweeter" />
+        </Link>
+      </div>
+      <div className="cloud">
+        <Link className="title" to="/">
+          <h1>
+            MiniTweeter
+          </h1>
+        </Link>
+      </div>
+      <div className="cloud">
         {!user && (
           <a href="/api/twitter/authenticate">
             <button type="button">Log in</button>

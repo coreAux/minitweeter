@@ -17,7 +17,7 @@ const FrontPage = () => {
 
   if (timeline.length <= 0) {
     return (
-      <div className="timeline">
+      <div className="timeline cloud">
         <h1>Welcome to MiniTweeter</h1>
         <p>
           This is a student project that is a node.js twist on the Minimal Twitter part of the course

@@ -62,11 +62,16 @@ a:link,
 a:visited,
 a:active, {
   color: mediumblue;
-}
 
-a:hover {
-  color: blue;
-  text-decoration: none;
+  &:hover {
+    color: blue;
+    text-decoration: none;
+  }
+
+  &.title {
+    color: black;
+    text-decoration: none;
+  }
 }
 
 img, picture, video, canvas, svg {
@@ -111,21 +116,28 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: radial-gradient(circle 4.75em at 50% 50%, white 40%, rgba(255, 255, 255, 0) 50%) 50px 0px / 50px 5em repeat-x;
-
-  img {
-    height: 50px;
-    width: 50px;
-  }
+  // background: radial-gradient(circle 4.75em at 50% 50%, white 40%, rgba(255, 255, 255, 0) 50%) 50px 0px / 50px 5em repeat-x;
 
   div {
     display: flex;
     place-items: center;
+
+    img {
+      height: 50px;
+      width: 50px;
+    }
   }
 
   p + a {
     margin-left: 20px;
   }
+}
+
+.cloud {
+  background: white;
+  box-shadow: -2px 2px 0 4px azure;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 .content {
