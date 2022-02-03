@@ -9,19 +9,17 @@ const NavBar = () => {
 
   return (
     <div className="navbar">
-      <div className="cloud">
+      <div>
         <Link to="/">
           <img src={images.miniTweeterLogo} alt="MiniTweeter" />
         </Link>
-      </div>
-      <div className="cloud">
         <Link className="title" to="/">
           <h1>
             MiniTweeter
           </h1>
         </Link>
       </div>
-      <div className="cloud">
+      <div>
         {!session && (
           <a href="/api/twitter/authenticate">
             <button type="button">Log in</button>
@@ -29,10 +27,10 @@ const NavBar = () => {
         )}
         {session && (
           <>
-            <p>
+            <div className="cloud">
               @
               {session}
-            </p>
+            </div>
             <a href="/api/twitter/logout">
               <button type="button">Log out</button>
             </a>

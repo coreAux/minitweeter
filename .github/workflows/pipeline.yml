@@ -50,14 +50,14 @@ jobs:
           HD_TWITTER_API_KEY: ${{secrets.TWITTER_API_KEY}}
           HD_TWITTER_API_KEY_SECRET: ${{secrets.TWITTER_API_KEY_SECRET}}
 
-      # - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      # - name: Bump version and push tag
-      #   if: contains(toJson(github.event.commits.*.message), '#skip') == false
-      #   uses: anothrNick/github-tag-action@eca2b69f9e2c24be7decccd0f15fdb1ea5906598
-      #   env:
-      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      #     DEFAULT_BUMP: 'patch'
+      - name: Bump version and push tag
+        if: contains(toJson(github.event.commits.*.message), '#skip') == false
+        uses: anothrNick/github-tag-action@eca2b69f9e2c24be7decccd0f15fdb1ea5906598
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          DEFAULT_BUMP: 'patch'
 
       # - uses: 8398a7/action-slack@v3
       #   with:

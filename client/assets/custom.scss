@@ -106,6 +106,12 @@ button {
   &:hover {
     background: blue;
   }
+
+  &:disabled {
+    color: lightgray;
+    background: slategray;
+    cursor: not-allowed;
+  }
 }
 
 .navbar {
@@ -125,11 +131,12 @@ button {
     img {
       height: 50px;
       width: 50px;
+      filter: hue-rotate(135deg);
     }
   }
 
-  p + a {
-    margin-left: 20px;
+  div > * {
+    margin: 0 20px;
   }
 }
 
