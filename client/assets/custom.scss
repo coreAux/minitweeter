@@ -110,7 +110,7 @@ button {
 
 .navbar {
   position: sticky;
-  top: 0;
+  top: 10px;
   height: 5em;
   padding: 20px;
   display: flex;
@@ -210,7 +210,6 @@ div.tweet p {
   align-items: center;
   margin-right: 2em;
 }
-
 
 .error {
   position: fixed;
