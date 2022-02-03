@@ -1,4 +1,4 @@
-<h1>MiniTweeter</h1>
+<h1>MiniTweeter 🐥</h1>
 <p>
   This is a student project that is a node.js twist on the Minimal Twitter project, part of the course <a href="https://www.superhi.com/courses/ajax-and-apis" target="_blank" rel="noopener noreferrer">Ajax + APIs</a> at SuperHi. MiniTweeter is also part of the final project for <a href="https://fullstackopen.com/en/part11" target="_blank" rel="noopener noreferrer">part 11</a> (CI/CD) of <a href="https://fullstackopen.com/en/" target="_blank" rel="noopener noreferrer">Full Stack Open</a>.
 </p>
